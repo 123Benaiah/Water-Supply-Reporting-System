@@ -2,6 +2,67 @@
 @section('title', 'Report Details - AquaReport')
 
 @section('content')
+<style>
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+    }
+    .image-item {
+        position: relative;
+        aspect-ratio: 4/3;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    .image-item:hover {
+        transform: scale(1.02);
+    }
+    .image-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal.active {
+        display: flex;
+    }
+    .modal img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 12px;
+    }
+    .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+    }
+</style>
+
+<div id="imageModal" class="modal" onclick="closeModal(event)">
+    <button class="modal-close" onclick="closeModal(event)">&times;</button>
+    <img id="modalImage" src="" alt="Full size">
+</div>
+
 <div class="mb-8">
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
@@ -63,11 +124,17 @@
                 <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">{{ $report->description }}</p>
             </div>
 
-            @if($report->image)
+            @if($report->images && count($report->images) > 0)
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Attached Image</h3>
-                    <div class="rounded-2xl overflow-hidden shadow-lg">
-                        <img src="{{ asset('storage/' . $report->image) }}" alt="Report image" class="w-full h-auto">
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                        Photos ({{ count($report->images) }})
+                    </h3>
+                    <div class="image-grid">
+                        @foreach($report->images as $image)
+                            <div class="image-item" onclick="openModal('{{ asset('storage/' . $image) }}')">
+                                <img src="{{ asset('storage/' . $image) }}" alt="Report image">
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             @endif
@@ -155,4 +222,25 @@
         </div>
     </div>
 </div>
+
+<script>
+function openModal(src) {
+    document.getElementById('modalImage').src = src;
+    document.getElementById('imageModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(event) {
+    if (event.target.id === 'imageModal' || event.target.classList.contains('modal-close')) {
+        document.getElementById('imageModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeModal({target: document.getElementById('imageModal')});
+    }
+});
+</script>
 @endsection

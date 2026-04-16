@@ -151,18 +151,6 @@
                             <span class="font-bold text-xl water-text-gradient">AquaReport</span>
                         </a>
                         <div class="hidden md:flex items-center ml-10 space-x-1">
-                            <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-ocean-50 hover:text-ocean-600 transition font-medium {{ request()->routeIs('dashboard') ? 'bg-ocean-50 text-ocean-600' : '' }}">
-                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                                </svg>
-                                Dashboard
-                            </a>
-                            <a href="{{ route('reports.create') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-ocean-50 hover:text-ocean-600 transition font-medium">
-                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                New Report
-                            </a>
                             @if(Auth::user()->isAdmin())
                                 <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-aqua-50 hover:text-aqua-600 transition font-medium {{ request()->routeIs('admin.*') ? 'bg-aqua-50 text-aqua-600' : '' }}">
                                     <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,27 +159,57 @@
                                     </svg>
                                     Admin Panel
                                 </a>
+                            @else
+                                <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-ocean-50 hover:text-ocean-600 transition font-medium {{ request()->routeIs('dashboard') ? 'bg-ocean-50 text-ocean-600' : '' }}">
+                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                    </svg>
+                                    Dashboard
+                                </a>
+                                <a href="{{ route('reports.create') }}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-ocean-50 hover:text-ocean-600 transition font-medium">
+                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    New Report
+                                </a>
                             @endif
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-ocean-400 to-aqua-500 flex items-center justify-center text-white font-semibold">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            </div>
-                            <div class="hidden md:block">
-                                <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-gray-500">{{ Auth::user()->isAdmin() ? 'Administrator' : 'Reporter' }}</p>
+                        <div class="relative group">
+                            <button class="flex items-center space-x-3 focus:outline-none">
+                                @if(Auth::user()->profile_picture)
+                                    <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Profile" class="w-10 h-10 rounded-full object-cover border-2 border-ocean-200">
+                                @else
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-ocean-400 to-aqua-500 flex items-center justify-center text-white font-semibold border-2 border-ocean-200">
+                                        {{ Auth::user()->initials }}
+                                    </div>
+                                @endif
+                                <div class="hidden md:block">
+                                    <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ Auth::user()->isAdmin() ? 'Administrator' : 'Reporter' }}</p>
+                                </div>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                <div class="py-1">
+                                    <a href="{{ route('profile.show') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-ocean-50">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                        </svg>
+                                        My Profile
+                                    </a>
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                            </svg>
+                                            Logout
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                        <form action="{{ route('logout') }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="p-2 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition" title="Logout">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                                </svg>
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>
