@@ -21,14 +21,25 @@ class AdminController extends Controller
             'resolved' => Report::resolved()->count(),
         ];
 
-        $reportsPerPage = $request->input('per_page_reports', 15);
-        $reportsPerPage = in_array($reportsPerPage, [5, 10, 20, 50, 100, 1000]) ? $reportsPerPage : 15;
+        $reportsPerPage = $request->input('per_page_reports', 5);
+        $reportsPerPage = in_array($reportsPerPage, [2, 3, 4, 5, 10, 15, 20, 50]) ? $reportsPerPage : 5;
         
-        $usersPerPage = $request->input('per_page_users', 15);
-        $usersPerPage = in_array($usersPerPage, [5, 10, 20, 50, 100, 1000]) ? $usersPerPage : 15;
+        $usersPerPage = $request->input('per_page_users', 5);
+        $usersPerPage = in_array($usersPerPage, [2, 3, 4, 5, 10, 15, 20, 50]) ? $usersPerPage : 5;
 
-        $reports = Report::with('user')->latest()->paginate($reportsPerPage);
-        $users = User::withCount('reports')->latest()->paginate($usersPerPage);
+        $reports = Report::with('user')->latest()->paginate($reportsPerPage, ['*'], 'reports_page');
+        $users = User::withCount('reports')->latest()->paginate($usersPerPage, ['*'], 'users_page');
+        
+        if ($request->ajax()) {
+            $reportsPaginator = $reports->appends(['tab' => 'reports', 'per_page_reports' => $reportsPerPage]);
+            $usersPaginator = $users->appends(['tab' => 'users', 'per_page_users' => $usersPerPage]);
+            return response()->json([
+                'reports' => view('admin.partials.reports-table', compact('reports'))->render(),
+                'users' => view('admin.partials.users-table', compact('users'))->render(),
+                'reports_pagination' => $reportsPaginator->links('pagination::bootstrap-5')->render(),
+                'users_pagination' => $usersPaginator->links('pagination::bootstrap-5')->render(),
+            ]);
+        }
         
         return view('admin.dashboard', compact('reports', 'stats', 'users', 'reportsPerPage', 'usersPerPage'));
     }
@@ -74,8 +85,10 @@ class AdminController extends Controller
             'resolved' => Report::resolved()->count(),
         ];
 
-        $reports = Report::where('status', $status)->with('user')->latest()->paginate(15);
-        return view('admin.dashboard', compact('reports', 'stats'));
+        $reports = Report::where('status', $status)->with('user')->latest()->paginate(15, ['*'], 'reports_page');
+        $users = User::withCount('reports')->latest()->paginate(15, ['*'], 'users_page');
+        
+        return view('admin.dashboard', compact('reports', 'stats', 'users'));
     }
 
     public function users()
@@ -134,7 +147,7 @@ class AdminController extends Controller
 
         $user->update($data);
 
-        return redirect()->route('admin.users')->with('success', 'User updated successfully!');
+        return redirect()->route('admin.dashboard', ['tab' => 'users'])->with('success', 'User updated successfully!');
     }
 
     public function destroyUser(User $user)
@@ -154,5 +167,29 @@ class AdminController extends Controller
         $user->delete();
 
         return redirect()->route('admin.dashboard')->with('success', 'User deleted successfully!');
+    }
+
+    public function destroyReport(Report $report)
+    {
+        if ($report->images) {
+            foreach ($report->images as $image) {
+                Storage::disk('public')->delete($image);
+            }
+        }
+
+        $report->delete();
+
+        return redirect()->route('admin.dashboard')->with('success', 'Report deleted successfully!');
+    }
+
+    public function deleteReportImage(Report $report, int $index)
+    {
+        $images = $report->images;
+        if (isset($images[$index])) {
+            Storage::disk('public')->delete($images[$index]);
+            array_splice($images, $index, 1);
+            $report->update(['images' => $images]);
+        }
+        return back()->with('success', 'Image deleted successfully!');
     }
 }

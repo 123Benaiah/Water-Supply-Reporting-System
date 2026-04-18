@@ -1,26 +1,26 @@
 @extends('layouts.app')
-@section('title', 'Admin Dashboard - AquaReport')
+@section('title', 'Admin Dashboard - ZAWASU')
 
 @section('content')
-<div class="mb-8">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+<div class="mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-            <p class="text-gray-600">Manage all water supply reports and system users</p>
+            <h1 class="fs-2 fw-bold text-ocean-900">Admin Dashboard</h1>
+            <p class="text-muted">Manage all water supply reports and system users</p>
         </div>
     </div>
 </div>
 
-<div class="mb-6">
-    <div class="flex space-x-1 bg-gray-100 p-1 rounded-xl w-fit">
-        <button onclick="showTab('reports')" id="tab-reports" class="tab-btn px-6 py-2.5 rounded-lg font-medium text-sm transition-all bg-white shadow text-gray-900">
-            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="mb-3">
+    <div class="btn-group" role="group">
+        <button onclick="showTab('reports')" id="tab-reports" class="btn btn-ocean tab-btn">
+            <svg width="16" height="16" class="me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
             Reports
         </button>
-        <button onclick="showTab('users')" id="tab-users" class="tab-btn px-6 py-2.5 rounded-lg font-medium text-sm transition-all text-gray-600 hover:text-gray-900">
-            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button onclick="showTab('users')" id="tab-users" class="btn btn-outline-secondary tab-btn">
+            <svg width="16" height="16" class="me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
             </svg>
             Users
@@ -29,163 +29,175 @@
 </div>
 
 <div id="tab-content-reports" class="tab-content">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <a href="{{ route('admin.dashboard') }}?tab=reports" class="glass-card rounded-2xl shadow-lg p-6 card-hover">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-ocean-100 to-ocean-200 flex items-center justify-center">
-                    <svg class="w-7 h-7 text-ocean-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-3">
+            <div class="card shadow border h-100">
+                <div class="card-body">
+                    <div class="rounded-3 bg-light d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                        <svg width="28" height="28" class="text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <p class="small text-muted mb-1">Total Reports</p>
+                    <p class="fs-3 fw-bold text-ocean-900 mb-0">{{ number_format($stats['total']) }}</p>
                 </div>
-                <span class="text-xs text-gray-400 font-medium px-2 py-1 bg-gray-100 rounded-lg">All</span>
             </div>
-            <p class="text-sm text-gray-500 mb-1">Total Reports</p>
-            <p class="text-3xl font-bold text-gray-900">{{ number_format($stats['total']) }}</p>
-        </a>
+        </div>
 
-        <a href="{{ route('admin.reports.status', 'Pending') }}?tab=reports" class="glass-card rounded-2xl shadow-lg p-6 card-hover border-2 border-amber-200 hover:border-amber-300">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-                    <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
+        <div class="col-12 col-md-3">
+            <div class="card shadow border border-warning h-100">
+                <div class="card-body">
+                    <div class="rounded-3 bg-warning-subtle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                        <svg width="28" height="28" class="text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <p class="small text-muted mb-1">Pending</p>
+                    <p class="fs-3 fw-bold text-warning mb-0">{{ number_format($stats['pending']) }}</p>
                 </div>
-                <span class="text-xs text-amber-600 font-medium px-2 py-1 bg-amber-100 rounded-lg animate-pulse">Action Needed</span>
             </div>
-            <p class="text-sm text-gray-500 mb-1">Pending</p>
-            <p class="text-3xl font-bold text-amber-600">{{ number_format($stats['pending']) }}</p>
-        </a>
+        </div>
 
-        <a href="{{ route('admin.reports.status', 'In Progress') }}?tab=reports" class="glass-card rounded-2xl shadow-lg p-6 card-hover">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                    <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
+        <div class="col-12 col-md-3">
+            <div class="card shadow border border-info h-100">
+                <div class="card-body">
+                    <div class="rounded-3 bg-info-subtle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                        <svg width="28" height="28" class="text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <p class="small text-muted mb-1">In Progress</p>
+                    <p class="fs-3 fw-bold text-info mb-0">{{ number_format($stats['in_progress']) }}</p>
                 </div>
-                <span class="text-xs text-blue-600 font-medium px-2 py-1 bg-blue-100 rounded-lg">Working</span>
             </div>
-            <p class="text-sm text-gray-500 mb-1">In Progress</p>
-            <p class="text-3xl font-bold text-blue-600">{{ number_format($stats['in_progress']) }}</p>
-        </a>
+        </div>
 
-        <a href="{{ route('admin.reports.status', 'Resolved') }}?tab=reports" class="glass-card rounded-2xl shadow-lg p-6 card-hover">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-                    <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
+        <div class="col-12 col-md-3">
+            <div class="card shadow border border-success h-100">
+                <div class="card-body">
+                    <div class="rounded-3 bg-success-subtle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                        <svg width="28" height="28" class="text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <p class="small text-muted mb-1">Resolved</p>
+                    <p class="fs-3 fw-bold text-success mb-0">{{ number_format($stats['resolved']) }}</p>
                 </div>
-                <span class="text-xs text-green-600 font-medium px-2 py-1 bg-green-100 rounded-lg">Complete</span>
             </div>
-            <p class="text-sm text-gray-500 mb-1">Resolved</p>
-            <p class="text-3xl font-bold text-green-600">{{ number_format($stats['resolved']) }}</p>
-        </a>
+        </div>
     </div>
 
-    <div class="glass-card rounded-2xl shadow-lg overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-ocean-50 to-aqua-50">
-            <div class="flex items-center justify-between flex-wrap gap-4">
-                <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-ocean-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="card shadow border overflow-hidden">
+        <div class="card-header bg-light">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <h2 class="fs-5 fw-bold text-ocean-900 d-flex align-items-center mb-0">
+                    <svg width="20" height="20" class="me-2 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                     </svg>
                     All Reports
                 </h2>
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500">{{ number_format($reports->total()) }} total</span>
-                    <form id="reportsPerPageForm" class="flex items-center space-x-2">
-                        <label class="text-sm text-gray-500">Show:</label>
-                        <select name="per_page_reports" onchange="document.getElementById('reportsPerPageForm').submit()" class="px-2 py-1 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500 bg-white">
-                            @foreach([5, 10, 20, 50, 100, 1000] as $perPage)
-                                <option value="{{ $perPage }}" {{ $reportsPerPage == $perPage ? 'selected' : '' }}>{{ $perPage == 1000 ? 'All' : $perPage }}</option>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="position-relative">
+                        <input type="text" id="adminSearchInput" placeholder="Search reports..." 
+                            class="form-control form-control-sm" style="width: 200px; padding-left: 2rem;">
+                        <svg width="16" height="16" class="text-muted position-absolute" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="left: 0.5rem; top: 50%; transform: translateY(-50%);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <span class="small text-muted">{{ number_format($reports->total()) }} total</span>
+                    <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2">
+                        <label class="small fw-semibold text-muted">Show:</label>
+                        <select name="per_page_reports" onchange="this.form.submit()"
+                            class="form-select form-select-sm" style="width: auto;">
+                            @foreach([2, 3, 4, 5, 10, 15, 20, 50] as $perPage)
+                                <option value="{{ $perPage }}" {{ $reportsPerPage == $perPage ? 'selected' : '' }}>{{ $perPage }}</option>
                             @endforeach
                         </select>
                         <input type="hidden" name="tab" value="reports">
-                        @if(request()->has('per_page_users'))
-                            <input type="hidden" name="per_page_users" value="{{ request('per_page_users') }}">
-                        @endif
                     </form>
                 </div>
             </div>
         </div>
 
         @if($reports->isEmpty())
-            <div class="p-12 text-center">
-                <div class="w-20 h-20 rounded-full bg-ocean-50 flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-ocean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-5 text-center">
+                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                    <svg width="40" height="40" class="text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                     </svg>
                 </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">No Reports Found</h3>
-                <p class="text-gray-500">There are no water supply reports to manage at this time.</p>
+                <h3 class="fs-5 fw-bold text-ocean-900 mb-2">No Reports Found</h3>
+                <p class="text-muted">There are no water supply reports to manage at this time.</p>
             </div>
         @else
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-100">
-                    <thead class="bg-gray-50/50">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Title</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
+<th class="py-3 text-start small fw-bold text-muted text-uppercase">Image</th>
+                            <th class="py-3 text-start small fw-bold text-muted text-uppercase">User</th>
+                            <th class="py-3 text-start small fw-bold text-muted text-uppercase">Title</th>
+                            <th class="py-3 text-start small fw-bold text-muted text-uppercase">Type</th>
+                            <th class="py-3 text-start small fw-bold text-muted text-uppercase">Status</th>
+                            <th class="py-3 text-start small fw-bold text-muted text-uppercase">Date</th>
+                            <th class="py-3 text-start small fw-bold text-muted text-uppercase">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-100">
+                    <tbody id="reportsTableBody">
                         @foreach($reports as $report)
-                            <tr class="hover:bg-ocean-50/30 transition">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-bold text-gray-900">#{{ $report->id }}</span>
+                            <tr>
+                                <td class="py-3">
+                                    @if($report->images && count($report->images) > 0)
+                                        <img src="{{ asset('storage/' . $report->images[0]) }}" alt="Report image" class="rounded-3 object-fit-cover" style="width: 60px; height: 40px;">
+                                    @else
+                                        <div class="rounded-3 bg-light d-flex align-items-center justify-content-center" style="width: 60px; height: 40px;">
+                                            <svg width="20" height="20" class="text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                        </div>
+                                    @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-ocean-400 to-aqua-500 flex items-center justify-center text-white text-xs font-semibold">
+                                <td class="py-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="rounded-circle bg-ocean-600 d-flex align-items-center justify-content-center text-white fw-bold" style="width: 40px; height: 40px; background: linear-gradient(135deg, #0ea5e9, #0891b2);">
                                             {{ strtoupper(substr($report->user->name, 0, 1)) }}
                                         </div>
-                                        <span class="text-sm font-medium text-gray-900">{{ $report->user->name }}</span>
+                                        <span class="small fw-semibold text-ocean-900">{{ $report->user->name }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900 max-w-xs truncate">{{ $report->title }}</div>
-                                    <div class="text-xs text-gray-500 truncate max-w-xs">{{ $report->location }}</div>
+                                <td class="py-3">
+                                    <div class="small fw-semibold text-ocean-900 text-truncate" style="max-width: 150px;">{{ $report->title }}</div>
+                                    <div class="small text-muted text-truncate" style="max-width: 150px;">{{ $report->location }}</div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-ocean-100 text-ocean-800">
-                                        {{ $report->issue_type }}
-                                    </span>
+                                <td class="py-3 text-nowrap">
+                                    <span class="badge bg-secondary">{{ $report->issue_type }}</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="py-3 text-nowrap">
                                     @if($report->status == 'Pending')
-                                        <span class="status-pending inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold">
-                                            <span class="w-2 h-2 rounded-full bg-amber-500 mr-2 animate-pulse"></span>
+                                        <span class="badge bg-warning text-dark rounded-pill">
+                                            <span class="d-inline-block rounded-circle bg-warning me-1" style="width: 6px; height: 6px;"></span>
                                             Pending
                                         </span>
                                     @elseif($report->status == 'In Progress')
-                                        <span class="status-progress inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold">
-                                            <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-spin"></span>
+                                        <span class="badge bg-info text-dark rounded-pill">
+                                            <span class="d-inline-block rounded-circle bg-info me-1" style="width: 6px; height: 6px;"></span>
                                             In Progress
                                         </span>
                                     @else
-                                        <span class="status-resolved inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold">
-                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <span class="badge bg-success rounded-pill">
+                                            <svg width="12" height="12" class="me-1" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                             </svg>
                                             Resolved
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td class="py-3 text-nowrap small text-muted">
                                     {{ $report->created_at->format('M d, Y') }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <a href="{{ route('admin.reports.show', $report) }}" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-gradient-to-r from-ocean-500 to-aqua-600 text-white font-medium hover:shadow-lg transition transform hover:-translate-y-0.5">
+                                <td class="py-3 text-nowrap">
+                                    <a href="{{ route('admin.reports.show', $report) }}" class="btn btn-ocean btn-sm">
                                         Manage
-                                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                        </svg>
                                     </a>
                                 </td>
                             </tr>
@@ -193,165 +205,142 @@
                     </tbody>
                 </table>
             </div>
-
-            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
-                <div class="flex items-center justify-between">
-                    <p class="text-sm text-gray-500">
-                        Showing {{ $reports->firstItem() ?? 0 }} to {{ $reports->lastItem() ?? 0 }} of {{ number_format($reports->total()) }}
-                    </p>
-                    {{ $reports->appends(['tab' => 'reports', 'per_page_reports' => $reportsPerPage, 'per_page_users' => $usersPerPage])->links() }}
-                </div>
+            <div class="card-footer bg-light d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+                {{ $reports->appends(['tab' => 'reports', 'per_page_reports' => $reportsPerPage, 'per_page_users' => $usersPerPage])->links('pagination::bootstrap-5') }}
             </div>
         @endif
     </div>
 </div>
 
-<div id="tab-content-users" class="tab-content hidden">
-    <div class="glass-card rounded-2xl shadow-lg overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-indigo-50">
-            <div class="flex items-center justify-between flex-wrap gap-4">
-                <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div id="tab-content-users" class="tab-content d-none">
+    <div class="card shadow border overflow-hidden">
+        <div class="card-header bg-light">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <h2 class="fs-5 fw-bold text-ocean-900 d-flex align-items-center mb-0">
+                    <svg width="20" height="20" class="me-2 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                     </svg>
                     User Management
                 </h2>
-                <div class="flex items-center space-x-4">
-                    <form id="usersPerPageForm" class="flex items-center space-x-2">
-                        <label class="text-sm text-gray-500">Show:</label>
-                        <select name="per_page_users" onchange="document.getElementById('usersPerPageForm').submit()" class="px-2 py-1 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white">
-                            @foreach([5, 10, 20, 50, 100, 1000] as $perPage)
-                                <option value="{{ $perPage }}" {{ $usersPerPage == $perPage ? 'selected' : '' }}>{{ $perPage == 1000 ? 'All' : $perPage }}</option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" name="tab" value="users">
-                        @if(request()->has('per_page_reports'))
-                            <input type="hidden" name="per_page_reports" value="{{ request('per_page_reports') }}">
-                        @endif
-                    </form>
-                    <button onclick="toggleAddUserForm()" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg font-medium text-sm hover:shadow-lg transition">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="d-flex align-items-center gap-3">
+                    <button onclick="toggleAddUserForm()" class="btn btn-ocean d-flex align-items-center">
+                        <svg width="16" height="16" class="me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
                         Add User
                     </button>
+                    <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2">
+                        <label class="small fw-semibold text-muted">Show:</label>
+                        <select name="per_page_users" onchange="this.form.submit()"
+                            class="form-select form-select-sm" style="width: auto;">
+                            @foreach([2, 3, 4, 5, 10, 15, 20, 50] as $perPage)
+                                <option value="{{ $perPage }}" {{ $usersPerPage == $perPage ? 'selected' : '' }}>{{ $perPage }}</option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="tab" value="users">
+                    </form>
                 </div>
             </div>
         </div>
 
-        <div id="addUserForm" class="hidden p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50/50 to-indigo-50/50">
-            <form action="{{ route('admin.users.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div id="addUserForm" class="d-none p-4 bg-light border-bottom">
+            <form action="{{ route('admin.users.store') }}" method="POST" class="row g-3">
                 @csrf
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small">Full Name</label>
                     <input type="text" name="name" required placeholder="John Doe"
-                        class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('name') border-red-300 bg-red-50 @enderror"
+                        class="form-control @error('name') is-invalid @enderror"
                         value="{{ old('name') }}">
-                    @error('name')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                    @enderror
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small">Email Address</label>
                     <input type="email" name="email" required placeholder="john@example.com"
-                        class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('email') border-red-300 bg-red-50 @enderror"
+                        class="form-control @error('email') is-invalid @enderror"
                         value="{{ old('email') }}">
-                    @error('email')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                    @enderror
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                    <select name="role" required
-                        class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white @error('role') border-red-300 @enderror">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small">Role</label>
+                    <select name="role" required class="form-select">
                         <option value="">Select Role</option>
                         <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>Reporter</option>
                     </select>
-                    @error('role')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                    @enderror
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small">Password</label>
                     <input type="password" name="password" required placeholder="Min. 8 characters"
-                        class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('password') border-red-300 bg-red-50 @enderror">
-                    @error('password')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                    @enderror
+                        class="form-control @error('password') is-invalid @enderror">
                 </div>
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                <div class="col-12">
+                    <label class="form-label fw-semibold small">Confirm Password</label>
                     <input type="password" name="password_confirmation" required placeholder="Re-enter password"
-                        class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        class="form-control">
                 </div>
-                <div class="md:col-span-2 flex justify-end space-x-3 pt-2">
-                    <button type="button" onclick="toggleAddUserForm()" class="px-6 py-2.5 border border-gray-200 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition">
+                <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                    <button type="button" onclick="toggleAddUserForm()" class="btn btn-outline-secondary">
                         Cancel
                     </button>
-                    <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg font-medium hover:shadow-lg transition">
+                    <button type="submit" class="btn btn-ocean">
                         Create User
                     </button>
                 </div>
             </form>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-100">
-                <thead class="bg-gray-50/50">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Reports</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Joined</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">User</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Email</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Role</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Reports</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Joined</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
+                <tbody>
                     @foreach($users as $user)
-                        <tr class="hover:bg-gray-50/50 transition">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-3">
+                        <tr>
+                            <td class="py-3">
+                                <div class="d-flex align-items-center gap-2">
                                     @if($user->profile_picture)
-                                        <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="{{ $user->name }}" class="w-10 h-10 rounded-full object-cover">
+                                        <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="{{ $user->name }}" class="rounded-circle" width="40" height="40">
                                     @else
-                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center text-white font-semibold text-sm">
+                                        <div class="rounded-circle bg-ocean-600 d-flex align-items-center justify-content-center text-white fw-bold small" style="width: 40px; height: 40px; background: linear-gradient(135deg, #0ea5e9, #0369a1);">
                                             {{ strtoupper(substr($user->name, 0, 1)) }}
                                         </div>
                                     @endif
-                                    <span class="text-sm font-medium text-gray-900">{{ $user->name }}</span>
+                                    <span class="small fw-semibold text-ocean-900">{{ $user->name }}</span>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $user->email }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2.5 py-1 text-xs font-medium rounded-lg {{ $user->isAdmin() ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' }}">
+                            <td class="py-3 text-nowrap small text-muted">{{ $user->email }}</td>
+                            <td class="py-3 text-nowrap">
+                                <span class="badge {{ $user->isAdmin() ? 'bg-ocean-700' : 'bg-secondary' }}">
                                     {{ $user->isAdmin() ? 'Admin' : 'Reporter' }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $user->reports_count }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $user->created_at->format('M d, Y') }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <div class="flex items-center space-x-2">
+                            <td class="py-3 text-nowrap small text-muted">{{ $user->reports_count }}</td>
+                            <td class="py-3 text-nowrap small text-muted">{{ $user->created_at->format('M d, Y') }}</td>
+                            <td class="py-3 text-nowrap">
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-outline-primary btn-sm" title="Edit User">
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
+                                    </a>
                                     @if($user->id !== auth()->id())
-                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('Are you sure? This will delete all reports by {{ $user->name }}. This action cannot be undone.');">
+                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure? This will delete all reports by {{ $user->name }}.');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-red-50 text-red-600 font-medium hover:bg-red-100 transition">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete User">
+                                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
-                                                Delete
                                             </button>
                                         </form>
                                     @else
-                                        <span class="px-3 py-1.5 text-xs text-gray-400 bg-gray-50 rounded-lg">(You)</span>
+                                        <span class="small text-muted">(You)</span>
                                     @endif
                                 </div>
                             </td>
@@ -359,64 +348,33 @@
                     @endforeach
                 </tbody>
             </table>
-            @if($users->hasPages())
-                <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
-                    <div class="flex items-center justify-between">
-                        <p class="text-sm text-gray-500">
-                            Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ number_format($users->total()) }} users
-                        </p>
-                        {{ $users->appends(['tab' => 'users', 'per_page_reports' => $reportsPerPage, 'per_page_users' => $usersPerPage])->links() }}
-                    </div>
-                </div>
-            @else
-                <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
-                    <p class="text-sm text-gray-500">
-                        Showing all {{ number_format($users->total()) }} users
-                    </p>
-                </div>
-            @endif
+        </div>
+        <div class="card-footer bg-light d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+            {{ $users->appends(['tab' => 'users', 'per_page_users' => $usersPerPage, 'per_page_reports' => $reportsPerPage])->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>
-
-<style>
-.tab-btn {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-</style>
 
 <script>
 let currentTab = 'reports';
 
 function showTab(tab) {
     currentTab = tab;
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.tab-btn').forEach(el => {
-        el.classList.remove('bg-white', 'shadow', 'text-gray-900');
-        el.classList.add('text-gray-600');
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('d-none'));
+    document.getElementById(`tab-content-${tab}`).classList.remove('d-none');
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('btn-ocean');
+        btn.classList.add('btn-outline-secondary');
     });
-    
-    document.getElementById('tab-content-' + tab).classList.remove('hidden');
-    const activeBtn = document.getElementById('tab-' + tab);
-    activeBtn.classList.add('bg-white', 'shadow', 'text-gray-900');
-    activeBtn.classList.remove('text-gray-600');
-    
-    history.replaceState(null, '', '?tab=' + tab);
+    const activeBtn = document.getElementById(`tab-${tab}`);
+    activeBtn.classList.remove('btn-outline-secondary');
+    activeBtn.classList.add('btn-ocean');
 }
 
 function toggleAddUserForm() {
     const form = document.getElementById('addUserForm');
-    form.classList.toggle('hidden');
+    form.classList.toggle('d-none');
 }
-
-document.querySelectorAll('.pagination a').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const url = new URL(this.href);
-        url.searchParams.set('tab', currentTab);
-        window.location.href = url.toString();
-    });
-});
 
 const urlParams = new URLSearchParams(window.location.search);
 const tabParam = urlParams.get('tab');
@@ -425,5 +383,18 @@ if (tabParam === 'users') {
 } else {
     showTab('reports');
 }
+
+document.getElementById('adminSearchInput')?.addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('#tab-content-reports tbody tr');
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    attachPaginationListeners();
+});
 </script>
 @endsection

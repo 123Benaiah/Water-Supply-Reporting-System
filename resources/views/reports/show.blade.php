@@ -1,246 +1,196 @@
 @extends('layouts.app')
-@section('title', 'Report Details - AquaReport')
+
+@section('title', 'Report Details - ZAWASU')
 
 @section('content')
-<style>
-    .image-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 16px;
-    }
-    .image-item {
-        position: relative;
-        aspect-ratio: 4/3;
-        border-radius: 12px;
-        overflow: hidden;
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
-    .image-item:hover {
-        transform: scale(1.02);
-    }
-    .image-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.9);
-        z-index: 9999;
-        align-items: center;
-        justify-content: center;
-    }
-    .modal.active {
-        display: flex;
-    }
-    .modal img {
-        max-width: 90%;
-        max-height: 90%;
-        border-radius: 12px;
-    }
-    .modal-close {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        width: 40px;
-        height: 40px;
-        background: white;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 20px;
-    }
-</style>
-
-<div id="imageModal" class="modal" onclick="closeModal(event)">
-    <button class="modal-close" onclick="closeModal(event)">&times;</button>
-    <img id="modalImage" src="" alt="Full size">
-</div>
-
-<div class="mb-8">
-    <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-4">
-            <a href="{{ route('dashboard') }}" class="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition">
-                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-            </a>
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Report #{{ $report->id }}</h1>
-                <p class="text-gray-500">Submitted {{ $report->created_at->format('F d, Y \a\t h:i A') }}</p>
-            </div>
-        </div>
-        @if($report->status == 'Pending')
-            <span class="status-pending inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold">
-                <span class="w-2 h-2 rounded-full bg-amber-500 mr-2 animate-pulse"></span>
-                Pending Review
-            </span>
-        @elseif($report->status == 'In Progress')
-            <span class="status-progress inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold">
-                <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-spin"></span>
-                In Progress
-            </span>
-        @else
-            <span class="status-resolved inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold">
-                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-                Resolved
-            </span>
-        @endif
-    </div>
-</div>
-
-<div class="grid lg:grid-cols-3 gap-8">
-    <div class="lg:col-span-2 space-y-6">
-        <div class="glass-card rounded-2xl shadow-xl p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $report->title }}</h2>
-
-            <div class="grid grid-cols-2 gap-6 mb-8">
-                <div class="p-4 rounded-xl bg-ocean-50">
-                    <p class="text-sm text-ocean-600 font-medium mb-1">Issue Type</p>
-                    <p class="text-gray-900 font-semibold">{{ $report->issue_type }}</p>
-                </div>
-                <div class="p-4 rounded-xl bg-aqua-50">
-                    <p class="text-sm text-aqua-600 font-medium mb-1">Location</p>
-                    <p class="text-gray-900 font-semibold">{{ $report->location }}</p>
-                </div>
-                @if($report->latitude && $report->longitude)
-                    <div class="p-4 rounded-xl bg-gray-50">
-                        <p class="text-sm text-gray-500 font-medium mb-1">Coordinates</p>
-                        <p class="text-gray-900 font-mono text-sm">{{ $report->latitude }}, {{ $report->longitude }}</p>
-                    </div>
-                @endif
-            </div>
-
-            <div class="mb-8">
-                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Description</h3>
-                <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">{{ $report->description }}</p>
-            </div>
-
-            @if($report->images && count($report->images) > 0)
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                        Photos ({{ count($report->images) }})
-                    </h3>
-                    <div class="image-grid">
-                        @foreach($report->images as $image)
-                            <div class="image-item" onclick="openModal('{{ asset('storage/' . $image) }}')">
-                                <img src="{{ asset('storage/' . $image) }}" alt="Report image">
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
+<div style="max-width: 900px;" class="mx-auto">
+    <div class="mb-4 d-flex align-items-center justify-content-between">
+        <a href="{{ route('dashboard') }}" class="d-inline-flex align-items-center text-ocean-600 text-decoration-none fw-semibold">
+            <svg width="20" height="20" class="me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Dashboard
+        </a>
+        <div class="d-flex align-items-center gap-2">
+            @if($report->status == 'Pending')
+                <span class="badge bg-warning text-dark rounded-pill fs-6 px-3 py-2">Pending Review</span>
+            @elseif($report->status == 'In Progress')
+                <span class="badge bg-info text-dark rounded-pill fs-6 px-3 py-2">In Progress</span>
+            @else
+                <span class="badge bg-success rounded-pill fs-6 px-3 py-2">Resolved</span>
             @endif
         </div>
+    </div>
 
-        @if($report->updates->count() > 0)
-            <div class="glass-card rounded-2xl shadow-xl p-8">
-                <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-ocean-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    Status Updates
-                </h3>
-                <div class="space-y-4">
-                    @foreach($report->updates->sortByDesc('created_at') as $update)
-                        <div class="flex items-start space-x-4 p-4 rounded-xl bg-gradient-to-r from-ocean-50 to-transparent border border-ocean-100">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-ocean-500 to-aqua-600 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+    <div class="card shadow-lg border overflow-hidden mb-4">
+        <div class="card-body p-4 p-md-5">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+                <h1 class="fs-3 fw-bold text-ocean-900">{{ $report->title }}</h1>
+                <p class="text-muted mt-2 mt-md-0 fw-medium">Submitted on {{ $report->created_at->format('M d, Y') }}</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    @if($report->images && count($report->images) > 0)
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                                @foreach($report->images as $index => $image)
+                                    <button class="btn btn-outline-secondary d-flex align-items-center gap-2 p-1" onclick="openFullImage('{{ asset('storage/' . $image) }}')">
+                                        <img src="{{ asset('storage/' . $image) }}" alt="Image {{ $index + 1 }}" class="rounded" style="width: 60px; height: 40px; object-fit: cover;">
+                                        <span class="small">Img {{ $index + 1 }}</span>
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        <div class="ratio ratio-16x9 bg-light border rounded-3 d-flex align-items-center justify-content-center text-muted">
+                            <div class="text-center">
+                                <svg width="64" height="64" class="mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <p class="fw-medium">No images uploaded</p>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="col-md-6">
+                    <h2 class="fs-4 fw-bold text-ocean-900 mb-3">{{ $report->title }}</h2>
+                    
+                    <div class="vstack gap-3">
+                        <div class="bg-light p-3 rounded-3 border">
+                            <p class="small text-muted mb-1 text-uppercase fw-bold">Issue Type</p>
+                            <p class="text-ocean-900 fw-bold mb-0">{{ $report->issue_type }}</p>
+                        </div>
+                        <div class="bg-light p-3 rounded-3 border">
+                            <p class="small text-muted mb-1 text-uppercase fw-bold">Location</p>
+                            <p class="text-ocean-900 fw-bold mb-0">{{ $report->location }}</p>
+                        </div>
+                        @if($report->latitude && $report->longitude)
+                        <div class="bg-light p-3 rounded-3 border">
+                            <p class="small text-muted mb-1 text-uppercase fw-bold">Coordinates</p>
+                            <p class="text-ocean-900 font-monospace small mb-0">{{ $report->latitude }}, {{ $report->longitude }}</p>
+                        </div>
+                        @endif
+                    </div>
+
+                    <div class="mt-3">
+                        <p class="small text-muted mb-2 text-uppercase fw-bold">Description</p>
+                        <div class="text-muted">
+                            {{ $report->description }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if($report->updates && $report->updates->count() > 0)
+        <div class="mb-4">
+            <h3 class="fs-5 fw-bold text-ocean-900 mb-3 d-flex align-items-center">
+                <svg width="20" height="20" class="me-2 text-ocean-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+                Official Response
+            </h3>
+            @foreach($report->updates as $update)
+                <div class="card shadow border-ocean-100 mb-3 position-relative overflow-hidden">
+                    <div class="position-absolute top-0 end-0 bg-ocean-50 rounded-circle opacity-50" style="width: 100px; height: 100px; margin-right: -50px; margin-top: -50px;"></div>
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="rounded-3 bg-ocean-600 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
+                                <svg width="24" height="24" class="text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.040L3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622l-.382-3.016z"/>
                                 </svg>
                             </div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-start mb-2">
-                                    <p class="text-sm font-semibold text-gray-900">{{ $update->admin->name }}</p>
-                                    <span class="text-xs text-gray-500 bg-white px-2 py-1 rounded-full">{{ $update->created_at->format('M d, Y h:i A') }}</span>
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div>
+                                        <p class="small fw-bold text-ocean-900 mb-0">{{ $update->admin->name }}</p>
+                                        <p class="small text-muted mb-0">Administrator • {{ $update->created_at->format('M d, Y') }}</p>
+                                    </div>
+                                    <span class="badge bg-ocean-50 text-ocean-700">{{ $update->status }}</span>
                                 </div>
-                                <div class="mb-2">
-                                    @if($update->status == 'In Progress')
-                                        <span class="status-progress inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium">
-                                            Moved to In Progress
-                                        </span>
-                                    @elseif($update->status == 'Resolved')
-                                        <span class="status-resolved inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium">
-                                            Marked as Resolved
-                                        </span>
-                                    @else
-                                        <span class="status-pending inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium">
-                                            {{ $update->status }}
-                                        </span>
-                                    @endif
+                                <div class="text-muted">
+                                    {{ $update->comment }}
                                 </div>
-                                <p class="text-sm text-gray-600">{{ $update->comment }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    <div class="card shadow-lg border">
+        <div class="card-body p-4 p-md-5">
+            <h3 class="fs-5 fw-bold text-ocean-900 mb-3">Report Timeline</h3>
+            <div class="position-relative ps-4">
+                <div class="position-absolute start-0 top-0 bottom-0 bg-light" style="width: 2px; left: 15px;"></div>
+                <div class="vstack gap-4">
+                    <!-- Initial Submission -->
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-circle bg-ocean-600 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px; z-index: 10;">
+                            <svg width="16" height="16" class="text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="small fw-bold text-ocean-900 mb-0">Report Submitted</p>
+                            <p class="small text-muted mb-0">{{ $report->created_at->format('M d, Y \a\t H:i') }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Updates -->
+                    @foreach($report->updates as $update)
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="rounded-circle bg-ocean-500 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px; z-index: 10;">
+                                <svg width="16" height="16" class="text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="small fw-bold text-ocean-900 mb-0">{{ $update->status }}</p>
+                                <p class="small text-muted mb-0">{{ $update->created_at->format('M d, Y \a\t H:i') }}</p>
                             </div>
                         </div>
                     @endforeach
                 </div>
             </div>
-        @endif
+        </div>
     </div>
+</div>
 
-    <div class="lg:col-span-1">
-        <div class="glass-card rounded-2xl shadow-xl p-6 sticky top-24">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Report Timeline</h3>
-            <div class="relative">
-                <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                <div class="space-y-6">
-                    <div class="relative flex items-start space-x-4">
-                        <div class="w-8 h-8 rounded-full bg-ocean-500 flex items-center justify-center z-10">
-                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">Report Submitted</p>
-                            <p class="text-xs text-gray-500">{{ $report->created_at->format('M d, Y') }}</p>
-                        </div>
-                    </div>
-                    @if($report->updates->count() > 0)
-                        @foreach($report->updates->sortBy('created_at') as $update)
-                            <div class="relative flex items-start space-x-4">
-                                <div class="w-8 h-8 rounded-full {{ $update->status == 'Resolved' ? 'bg-green-500' : 'bg-blue-500' }} flex items-center justify-center z-10">
-                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-900">{{ $update->status }}</p>
-                                    <p class="text-xs text-gray-500">{{ $update->created_at->format('M d, Y') }}</p>
-                                </div>
-                            </div>
-                        @endforeach
-                    @endif
-                </div>
+<!-- Full Image Modal -->
+<div class="modal fade" id="fullImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0 text-center">
+                <img id="fullImage" src="" class="img-fluid" alt="Full size image">
             </div>
         </div>
     </div>
 </div>
 
+<style>
+.view-mode-btn.active { background-color: var(--ocean-600); color: white; border-color: var(--ocean-600); }
+#imageGallery.list-view .image-item { width: 100%; }
+#imageGallery.list-view .card { flex-direction: row; }
+#imageGallery.list-view .card-img-top { width: 200px; height: 120px; }
+#imageGallery.tile-view .col-4 { width: 100%; }
+#imageGallery.tile-view .card { flex-direction: row; }
+#imageGallery.tile-view .card-img-top { width: 300px; height: 180px; }
+</style>
 <script>
-function openModal(src) {
-    document.getElementById('modalImage').src = src;
-    document.getElementById('imageModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
+function setViewMode(mode) {
+    const gallery = document.getElementById('imageGallery');
+    gallery.className = 'row g-3 ' + (mode === 'list' ? 'list-view' : mode === 'tile' ? 'tile-view' : '');
+    document.querySelectorAll('.view-mode-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.closest('.view-mode-btn').classList.add('active');
 }
-
-function closeModal(event) {
-    if (event.target.id === 'imageModal' || event.target.classList.contains('modal-close')) {
-        document.getElementById('imageModal').classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
-
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeModal({target: document.getElementById('imageModal')});
-    }
-});
+function openFullImage(src) { document.getElementById('fullImage').src = src; new bootstrap.Modal(document.getElementById('fullImageModal')).show(); }
 </script>
 @endsection

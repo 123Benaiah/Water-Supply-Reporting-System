@@ -1,15 +1,15 @@
 @extends('layouts.app')
-@section('title', 'User Management - AquaReport')
+@section('title', 'User Management - ZAWASU')
 
 @section('content')
-<div class="mb-8">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+<div class="mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
-            <p class="text-gray-600">Manage all registered users</p>
+            <h1 class="fs-2 fw-bold text-ocean-900">User Management</h1>
+            <p class="text-muted">Manage all registered users</p>
         </div>
-        <a href="{{ route('admin.users.create') }}" class="btn-water mt-4 md:mt-0 inline-flex items-center px-5 py-2.5 rounded-xl text-white font-semibold">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href="{{ route('admin.users.create') }}" class="btn btn-ocean mt-3 mt-md-0 d-inline-flex align-items-center">
+            <svg width="20" height="20" class="me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
             </svg>
             Add New User
@@ -17,123 +17,100 @@
     </div>
 </div>
 
-@if(session('success'))
-    <div class="mb-6 p-4 rounded-xl bg-gradient-to-r from-nature-100 to-nature-50 border border-nature-200 text-nature-800 flex items-center space-x-3">
-        <svg class="w-6 h-6 text-nature-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <span>{{ session('success') }}</span>
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="mb-6 p-4 rounded-xl bg-red-100 border border-red-200 text-red-800 flex items-center space-x-3">
-        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <span>{{ session('error') }}</span>
-    </div>
-@endif
-
-<div class="glass-card rounded-2xl shadow-lg overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-ocean-50 to-aqua-50">
-        <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-ocean-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="card shadow-lg border overflow-hidden">
+    <div class="card-header bg-light">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <h2 class="fs-5 fw-bold mb-0 d-flex align-items-center">
+                <svg width="20" height="20" class="me-2 text-ocean-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
                 All Users
             </h2>
-            <span class="text-sm text-gray-500">{{ $users->total() }} users</span>
+            <div class="d-flex align-items-center gap-3">
+                <div class="position-relative">
+                    <input type="text" id="userSearchInput" placeholder="Search users..." 
+                        class="form-control form-control-sm" style="width: 200px; padding-left: 2rem;">
+                    <svg width="16" height="16" class="text-muted position-absolute" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="left: 0.5rem; top: 50%; transform: translateY(-50%);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+                <span class="small text-muted">{{ $users->total() }} users</span>
+            </div>
         </div>
     </div>
 
     @if($users->isEmpty())
-        <div class="p-12 text-center">
-            <div class="w-20 h-20 rounded-full bg-ocean-50 flex items-center justify-center mx-auto mb-6">
-                <svg class="w-10 h-10 text-ocean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="p-5 text-center">
+            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                <svg width="40" height="40" class="text-ocean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">No Users Found</h3>
-            <p class="text-gray-500">There are no users in the system.</p>
+            <h3 class="fs-5 fw-bold text-ocean-900 mb-2">No Users Found</h3>
+            <p class="text-muted">There are no users in the system.</p>
         </div>
     @else
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-100">
-                <thead class="bg-gray-50/50">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Reports</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Joined</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">User</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Role</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Reports</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Joined</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
+                <tbody>
                     @foreach($users as $user)
-                        <tr class="hover:bg-ocean-50/30 transition">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-3">
+                        <tr>
+                            <td class="py-3">
+                                <div class="d-flex align-items-center gap-2">
                                     @if($user->profile_picture)
-                                        <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="" class="w-10 h-10 rounded-full object-cover">
+                                        <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="" class="rounded-circle" width="40" height="40">
                                     @elseif($user->isAdmin())
-                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center text-white fw-bold small" style="width: 40px; height: 40px; background: linear-gradient(135deg, #a855f7, #ec4899);">
                                             {{ $user->initials }}
                                         </div>
                                     @else
-                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-ocean-400 to-aqua-500 flex items-center justify-center text-white font-bold text-sm">
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center text-white fw-bold small" style="width: 40px; height: 40px; background: linear-gradient(135deg, #0ea5e9, #06b6d4);">
                                             {{ $user->initials }}
                                         </div>
                                     @endif
                                     <div>
-                                        <p class="text-sm font-semibold text-gray-900">{{ $user->name }}</p>
-                                        <p class="text-xs text-gray-500">ID: #{{ $user->id }}</p>
+                                        <p class="small fw-semibold text-ocean-900 mb-0">{{ $user->name }}</p>
+                                        <p class="small text-muted mb-0">{{ $user->email }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <p class="text-sm text-gray-700">{{ $user->email }}</p>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="py-3 text-nowrap">
                                 @if($user->isAdmin())
-                                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
+                                    <span class="badge bg-purple-700">
                                         Administrator
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-ocean-100 text-ocean-800">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                        </svg>
+                                    <span class="badge bg-ocean-600">
                                         Reporter
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
-                                    {{ $user->reports->count() }} reports
-                                </span>
+                            <td class="py-3 text-nowrap">
+                                <span class="badge bg-secondary">{{ $user->reports->count() }} reports</span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $user->created_at->format('M d, Y') }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <a href="{{ route('admin.users.edit', $user) }}" class="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition" title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <td class="py-3 text-nowrap small text-muted">{{ $user->created_at->format('M d, Y') }}</td>
+                            <td class="py-3 text-nowrap">
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-outline-primary btn-sm" title="Edit">
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
                                     </a>
                                     @if($user->id !== auth()->id())
-                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure? All reports by this user will also be deleted.');">
+                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure? All reports by this user will also be deleted.');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition" title="Delete">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete">
+                                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
                                             </button>
@@ -147,9 +124,20 @@
             </table>
         </div>
 
-        <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+        <div class="card-footer bg-light">
             {{ $users->links() }}
         </div>
     @endif
 </div>
+
+<script>
+document.getElementById('userSearchInput')?.addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+});
+</script>
 @endsection

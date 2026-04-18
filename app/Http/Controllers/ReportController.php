@@ -6,12 +6,24 @@ use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $reports = Auth::user()->reports()->latest()->paginate(10);
+        $perPage = $request->input('per_page', 5);
+        $perPage = in_array($perPage, [2, 3, 4, 5, 10, 15, 20, 50]) ? $perPage : 5;
+        
+        $reports = Auth::user()->reports()->latest()->paginate($perPage);
+        
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('reports.partials.reports-list', compact('reports'))->render(),
+                'pagination' => $reports->appends(['per_page' => $perPage])->links('pagination::bootstrap-5')->render(),
+            ]);
+        }
+        
         return view('reports.dashboard', compact('reports'));
     }
 
@@ -22,7 +34,7 @@ class ReportController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'issue_type' => ['required', 'in:Leak,No water,Low pressure,Contaminated water'],
@@ -54,6 +66,14 @@ class ReportController extends Controller
             'images' => $imagePaths,
             'status' => 'Pending',
         ]);
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Report submitted successfully!',
+                'redirect' => route('dashboard')
+            ]);
+        }
 
         return redirect()->route('dashboard')->with('success', 'Report submitted successfully!');
     }

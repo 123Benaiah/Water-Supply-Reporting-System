@@ -1,15 +1,15 @@
 @extends('layouts.app')
-@section('title', 'User Management - AquaReport')
+@section('title', 'User Management - ZAWASU')
 
 @section('content')
-<div class="mb-8">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+<div class="mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
-            <p class="text-gray-600">View and manage all registered users</p>
+            <h1 class="fs-2 fw-bold text-ocean-900">User Management</h1>
+            <p class="text-muted">View and manage all registered users</p>
         </div>
-        <a href="{{ route('admin.dashboard') }}" class="mt-4 md:mt-0 inline-flex items-center px-5 py-2.5 rounded-xl bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary mt-3 mt-md-0 d-inline-flex align-items-center">
+            <svg width="20" height="20" class="me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
             </svg>
             Back to Dashboard
@@ -17,96 +17,78 @@
     </div>
 </div>
 
-<div class="glass-card rounded-2xl shadow-lg overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-ocean-50 to-aqua-50">
-        <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-ocean-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="card shadow-lg border overflow-hidden">
+    <div class="card-header bg-light">
+        <div class="d-flex align-items-center justify-content-between">
+            <h2 class="fs-5 fw-bold mb-0 d-flex align-items-center">
+                <svg width="20" height="20" class="me-2 text-ocean-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
                 All Users
             </h2>
-            <span class="text-sm text-gray-500">{{ $users->total() }} users</span>
+            <span class="small text-muted">{{ $users->total() }} users</span>
         </div>
     </div>
 
     @if($users->isEmpty())
-        <div class="p-12 text-center">
-            <div class="w-20 h-20 rounded-full bg-ocean-50 flex items-center justify-center mx-auto mb-6">
-                <svg class="w-10 h-10 text-ocean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="p-5 text-center">
+            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                <svg width="40" height="40" class="text-ocean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">No Users Found</h3>
-            <p class="text-gray-500">There are no registered users in the system.</p>
+            <h3 class="fs-5 fw-bold text-ocean-900 mb-2">No Users Found</h3>
+            <p class="text-muted">There are no registered users in the system.</p>
         </div>
     @else
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-100">
-                <thead class="bg-gray-50/50">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Reports</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Joined</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">User</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Role</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Reports</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Joined</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
+                <tbody>
                     @foreach($users as $user)
-                        <tr class="hover:bg-ocean-50/30 transition">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-3">
+                        <tr>
+                            <td class="py-3">
+                                <div class="d-flex align-items-center gap-2">
                                     @if($user->isAdmin())
-                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center text-white fw-bold small" style="width: 40px; height: 40px; background: linear-gradient(135deg, #a855f7, #ec4899);">
                                             {{ strtoupper(substr($user->name, 0, 1)) }}
                                         </div>
                                     @else
-                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-ocean-400 to-aqua-500 flex items-center justify-center text-white font-bold text-sm">
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center text-white fw-bold small" style="width: 40px; height: 40px; background: linear-gradient(135deg, #0ea5e9, #06b6d4);">
                                             {{ strtoupper(substr($user->name, 0, 1)) }}
                                         </div>
                                     @endif
                                     <div>
-                                        <p class="text-sm font-semibold text-gray-900">{{ $user->name }}</p>
-                                        <p class="text-xs text-gray-500">ID: #{{ $user->id }}</p>
+                                        <p class="small fw-semibold text-ocean-900 mb-0">{{ $user->name }}</p>
+                                        <p class="small text-muted mb-0">{{ $user->email }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <p class="text-sm text-gray-700">{{ $user->email }}</p>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="py-3 text-nowrap">
                                 @if($user->isAdmin())
-                                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        Administrator
-                                    </span>
+                                    <span class="badge bg-purple-700">Administrator</span>
                                 @else
-                                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-ocean-100 text-ocean-800">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                        </svg>
-                                        Reporter
-                                    </span>
+                                    <span class="badge bg-ocean-600">Reporter</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
-                                    {{ $user->reports->count() }} reports
-                                </span>
+                            <td class="py-3 text-nowrap">
+                                <span class="badge bg-secondary">{{ $user->reports->count() }} reports</span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $user->created_at->format('M d, Y') }}
-                            </td>
+                            <td class="py-3 text-nowrap small text-muted">{{ $user->created_at->format('M d, Y') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
 
-        <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+        <div class="card-footer bg-light">
             {{ $users->links() }}
         </div>
     @endif

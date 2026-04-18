@@ -1,160 +1,143 @@
 @extends('layouts.app')
-@section('title', 'My Dashboard - AquaReport')
+
+@section('title', 'My Reports - ZAWASU')
 
 @section('content')
-<div class="mb-8">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+<div class="mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between bg-white p-4 rounded-3 shadow border">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">My Reports</h1>
-            <p class="text-gray-600">Track and manage your water supply issue reports</p>
+            <h1 class="fs-2 fw-bold text-ocean-900">My Reports</h1>
+            <p class="text-muted mt-1">Track and manage your submitted water supply reports</p>
         </div>
-        <a href="{{ route('reports.create') }}" class="btn-water mt-4 md:mt-0 inline-flex items-center px-6 py-3 rounded-xl text-white font-semibold shadow-lg">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        <a href="{{ route('reports.create') }}" class="mt-3 mt-md-0 btn btn-ocean d-inline-flex align-items-center px-4 py-2 shadow">
+            <svg class="me-2" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
             Submit New Report
         </a>
     </div>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <div class="glass-card rounded-2xl shadow-lg p-6 card-hover">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm font-medium text-gray-500 mb-1">Total Reports</p>
-                <p class="text-4xl font-bold text-gray-900">{{ $reports->total() }}</p>
-            </div>
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-ocean-100 to-ocean-200 flex items-center justify-center">
-                <svg class="w-7 h-7 text-ocean-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-            </div>
+<div class="row g-4 mb-4">
+    <div class="col-12 col-md-4">
+        <div class="bg-white p-4 rounded-3 shadow border position-relative overflow-hidden">
+            <div class="position-absolute top-0 end-0 bg-ocean-50 rounded-circle opacity-50" style="width: 80px; height: 80px; margin-right: -40px; margin-top: -40px;"></div>
+            <p class="small fw-bold text-muted text-uppercase mb-2">Total Reports</p>
+            <p class="fs-1 fw-bold text-ocean-900">{{ $reports->total() }}</p>
         </div>
     </div>
-
-    <div class="glass-card rounded-2xl shadow-lg p-6 card-hover">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm font-medium text-gray-500 mb-1">Pending</p>
-                <p class="text-4xl font-bold text-amber-600">{{ $reports->where('status', 'Pending')->count() }}</p>
-            </div>
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-                <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-            </div>
+    <div class="col-12 col-md-4">
+        <div class="bg-white p-4 rounded-3 shadow border border-warning position-relative overflow-hidden">
+            <div class="position-absolute top-0 end-0 bg-warning-subtle rounded-circle opacity-50" style="width: 80px; height: 80px; margin-right: -40px; margin-top: -40px;"></div>
+            <p class="small fw-bold text-muted text-uppercase mb-2">Pending</p>
+            <p class="fs-1 fw-bold text-warning">{{ $reports->where('status', 'Pending')->count() }}</p>
         </div>
     </div>
-
-    <div class="glass-card rounded-2xl shadow-lg p-6 card-hover">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm font-medium text-gray-500 mb-1">Resolved</p>
-                <p class="text-4xl font-bold text-green-600">{{ $reports->where('status', 'Resolved')->count() }}</p>
-            </div>
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-                <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-            </div>
+    <div class="col-12 col-md-4">
+        <div class="bg-white p-4 rounded-3 shadow border border-success position-relative overflow-hidden">
+            <div class="position-absolute top-0 end-0 bg-success-subtle rounded-circle opacity-50" style="width: 80px; height: 80px; margin-right: -40px; margin-top: -40px;"></div>
+            <p class="small fw-bold text-muted text-uppercase mb-2">Resolved</p>
+            <p class="fs-1 fw-bold text-success">{{ $reports->where('status', 'Resolved')->count() }}</p>
         </div>
     </div>
 </div>
 
 @if($reports->isEmpty())
-    <div class="glass-card rounded-2xl shadow-lg p-12 text-center">
-        <div class="w-20 h-20 rounded-full bg-ocean-50 flex items-center justify-center mx-auto mb-6">
-            <svg class="w-10 h-10 text-ocean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+    <div class="bg-white rounded-3 shadow border p-5 text-center">
+        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+            <svg width="40" height="40" class="text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
         </div>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">No Reports Yet</h3>
-        <p class="text-gray-500 mb-6 max-w-md mx-auto">You haven't submitted any water supply issue reports. Start by reporting an issue in your area.</p>
-        <a href="{{ route('reports.create') }}" class="btn-water inline-flex items-center px-6 py-3 rounded-xl text-white font-semibold">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            Submit Your First Report
+        <h3 class="fs-5 fw-bold text-ocean-900 mb-2">No Reports Yet</h3>
+        <p class="text-muted mb-3">You haven't submitted any water supply reports. Help us improve the system by reporting issues.</p>
+        <a href="{{ route('reports.create') }}" class="btn btn-ocean">
+            Start Your First Report
         </a>
     </div>
 @else
-    <div class="glass-card rounded-2xl shadow-lg overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-ocean-50 to-aqua-50">
-            <h2 class="text-lg font-semibold text-gray-900">Recent Reports</h2>
+    <div class="bg-white rounded-3 shadow border overflow-hidden">
+        <div class="px-4 py-3 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <h2 class="fs-5 fw-bold text-ocean-900">Recent Reports</h2>
+            <div class="d-flex align-items-center gap-3">
+                <div class="position-relative">
+                    <input type="text" id="searchInput" placeholder="Search reports..." 
+                        class="form-control form-control-sm" style="width: 200px; padding-left: 2rem;">
+                    <svg width="16" height="16" class="text-muted position-absolute" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="left: 0.5rem; top: 50%; transform: translateY(-50%);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+                <form method="GET" action="{{ route('dashboard') }}" class="d-flex align-items-center gap-2">
+                    <label class="small fw-semibold text-muted">Show:</label>
+                    <select name="per_page" onchange="this.form.submit()"
+                        class="form-select form-select-sm" style="width: auto;">
+                        @foreach([2, 3, 4, 5, 10, 15, 20, 50] as $perPage)
+                            <option value="{{ $perPage }}" {{ $reports->perPage() == $perPage ? 'selected' : '' }}>{{ $perPage }}</option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-100">
-                <thead class="bg-gray-50/50">
+
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">ID</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Title</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Image</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Title</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Type</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Status</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Date</th>
+                        <th class="py-3 text-start small fw-bold text-muted text-uppercase">Action</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
+                <tbody id="reportsTableBody">
                     @foreach($reports as $report)
-                        <tr class="hover:bg-ocean-50/30 transition">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm font-semibold text-gray-900">#{{ $report->id }}</span>
+                        <tr>
+                            <td class="py-3">
+                                @if($report->images && count($report->images) > 0)
+                                    <img src="{{ asset('storage/' . $report->images[0]) }}" alt="Report image" class="rounded-3 object-fit-cover" style="width: 60px; height: 40px;">
+                                @else
+                                    <div class="rounded-3 bg-light d-flex align-items-center justify-content-center" style="width: 60px; height: 40px;">
+                                        <svg width="20" height="20" class="text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                @endif
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-900 max-w-xs truncate">{{ $report->title }}</div>
-                                <div class="text-xs text-gray-500 truncate max-w-xs">{{ $report->location }}</div>
+                            <td class="py-3">
+                                <div class="fw-semibold text-ocean-900 text-truncate" style="max-width: 200px;">{{ $report->title }}</div>
+                                <div class="small text-muted text-truncate" style="max-width: 200px;">{{ $report->location }}</div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-ocean-100 text-ocean-800">
-                                    @if($report->issue_type == 'Leak')
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.05 3.636a1 1 0 010 1.414 7 7 0 000 9.9 1 1 0 11-1.414 1.414 9 9 0 010-12.728 1 1 0 011.414 0zm9.9 0a1 1 0 011.414 0 9 9 0 010 12.728 1 1 0 11-1.414-1.414 7 7 0 000-9.9 1 1 0 010-1.414zM8 10.93a1 1 0 011.414 0 7 7 0 000 9.9 1 1 0 11-1.414-1.414 9 9 0 010-12.728 1 1 0 010 1.414z" clip-rule="evenodd"/>
-                                        </svg>
-                                    @elseif($report->issue_type == 'Contaminated water')
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                        </svg>
-                                    @elseif($report->issue_type == 'No water')
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                                        </svg>
-                                    @else
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                                        </svg>
-                                    @endif
-                                    {{ $report->issue_type }}
-                                </span>
+                            <td class="py-3 text-nowrap">
+                                <span class="badge bg-secondary">{{ $report->issue_type }}</span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="py-3 text-nowrap">
                                 @if($report->status == 'Pending')
-                                    <span class="status-pending inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold">
-                                        <span class="w-2 h-2 rounded-full bg-amber-500 mr-2 animate-pulse"></span>
+                                    <span class="badge bg-warning text-dark rounded-pill">
+                                        <span class="d-inline-block rounded-circle bg-warning me-1" style="width: 6px; height: 6px;"></span>
                                         Pending
                                     </span>
                                 @elseif($report->status == 'In Progress')
-                                    <span class="status-progress inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold">
-                                        <span class="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-spin"></span>
+                                    <span class="badge bg-info text-dark rounded-pill">
+                                        <span class="d-inline-block rounded-circle bg-info me-1" style="width: 6px; height: 6px;"></span>
                                         In Progress
                                     </span>
                                 @else
-                                    <span class="status-resolved inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <span class="badge bg-success rounded-pill">
+                                        <svg width="12" height="12" class="me-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                         </svg>
                                         Resolved
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td class="py-3 text-nowrap small text-muted">
                                 {{ $report->created_at->format('M d, Y') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <a href="{{ route('reports.show', $report) }}" class="inline-flex items-center px-3 py-1.5 rounded-lg text-ocean-600 hover:bg-ocean-50 font-medium transition">
+                            <td class="py-3 text-nowrap">
+                                <a href="{{ route('reports.show', $report) }}" class="btn btn-ocean btn-sm">
                                     View Details
-                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                    </svg>
                                 </a>
                             </td>
                         </tr>
@@ -163,9 +146,20 @@
             </table>
         </div>
 
-        <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
-            {{ $reports->links() }}
+        <div class="px-4 py-3 border-top bg-light d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+            {{ $reports->appends(['per_page' => $reports->perPage()])->links('pagination::bootstrap-5') }}
         </div>
     </div>
 @endif
+
+<script>
+document.getElementById('searchInput')?.addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+});
+</script>
 @endsection
